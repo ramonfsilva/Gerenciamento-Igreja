@@ -1,58 +1,151 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gerenciamento de Igrejas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema SaaS multi-igreja para gestão eclesiástica.
 
-## About Laravel
+## Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Laravel 11** (PHP 8.4)
+- **Blade + Livewire 3 + Volt**
+- **Tailwind CSS + Alpine.js**
+- **Vite**
+- **Spatie Permission**
+- **MySQL 8**
+- **Docker**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Docker
+- Docker Compose
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalação
 
 ```bash
-composer require laravel/boost --dev
+# 1. Clone o repositório
+git clone <url-do-repositorio>
+cd Gerenciamento-Igreja
 
-php artisan boost:install
+# 2. Inicie os containers
+docker compose up -d --build
+
+# 3. Instale as dependências do frontend
+npm install && npm run build
+
+# 4. Execute as migrations e seeders
+docker compose exec app php artisan migrate --seed
+
+# 5. Acesse a aplicação
+# App: http://localhost:8080
+# phpMyAdmin: http://localhost:8081
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Comandos Úteis
 
-## Contributing
+```bash
+# Acessar o container
+docker compose exec app bash
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Executar comandos Artisan
+docker compose exec app php artisan <comando>
 
-## Code of Conduct
+# Ver logs do container
+docker compose logs -f app
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Parar os containers
+docker compose down
 
-## Security Vulnerabilities
+# Recriar o banco do zero
+docker compose exec app php artisan migrate:fresh --seed
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Build do frontend
+npm run build
 
-## License
+# Watch do frontend (desenvolvimento)
+npm run dev
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Credenciais de Desenvolvimento
+
+| Nome | Email | Senha | Perfil |
+|------|-------|-------|--------|
+| Administrador Master | admin@system.local | 12345678 | Master |
+| Administrador da Igreja | admin@igreja.local | 12345678 | Admin |
+
+> ⚠️ Senha `12345678` é apenas para ambiente local/desenvolvimento.
+
+## Estrutura do Projeto
+
+```
+app/
+├── Livewire/
+│   ├── Dashboard.php          # Dashboard (Livewire Component)
+│   └── Forms/
+│       └── LoginForm.php      # Formulário de login
+├── Models/
+│   ├── Church.php             # Model de Igreja
+│   └── User.php               # Model de Usuário
+├── helpers.php                # Funções helpers (isMaster, currentChurch)
+database/
+├── migrations/
+│   ├── 0001_01_01_000000_create_users_table.php
+│   ├── 2026_06_16_023236_create_permission_tables.php  (Spatie)
+│   ├── 2026_06_16_023239_create_churches_table.php
+│   └── 2026_06_16_023643_add_church_foreign_key_to_users.php
+└── seeders/
+    ├── DatabaseSeeder.php
+    ├── RolePermissionSeeder.php
+    ├── ChurchSeeder.php
+    └── UserSeeder.php
+resources/views/
+├── layouts/
+│   ├── app.blade.php          # Layout autenticado (sidebar + navbar)
+│   └── guest.blade.php        # Layout público (login)
+├── components/
+│   ├── sidebar.blade.php      # Sidebar de navegação
+│   └── sidebar-link.blade.php # Link da sidebar
+└── livewire/
+    ├── dashboard.blade.php    # Dashboard
+    ├── churches/
+    │   └── index.blade.php    # CRUD Igrejas (Volt)
+    └── users/
+        └── index.blade.php    # CRUD Usuários (Volt)
+```
+
+## Perfis e Permissões
+
+### Master
+- Gerenciar igrejas (CRUD completo)
+- Gerenciar usuários de qualquer igreja
+- Visualizar dashboard geral (total igrejas, total usuários)
+
+### Admin
+- Gerenciar usuários da própria igreja
+- Visualizar dashboard da igreja
+- Visualizar igrejas
+
+### Tesoureiro (reservado)
+- Acesso financeiro (futuro)
+
+### Secretaria (reservado)
+- Acesso membros (futuro)
+
+## Multi-Tenant
+
+O sistema é multi-igreja. O isolamento por `church_id` é aplicado nas consultas:
+
+- **Master**: visualiza dados de todas as igrejas
+- **Admin/Secrataria/Tesoureiro**: visualiza apenas dados da própria igreja
+- O Master possui `church_id = null`
+
+## Docker
+
+### Serviços
+
+| Serviço | Porta | Descrição |
+|---------|-------|-----------|
+| app | 8080 | Aplicação Laravel (PHP CLI + artisan serve) |
+| mysql | 3307 | Banco de dados MySQL 8 |
+| phpmyadmin | 8081 | Admin do MySQL (apenas dev) |
+
+## Licença
+
+MIT
