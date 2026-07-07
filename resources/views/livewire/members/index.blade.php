@@ -169,8 +169,8 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800">Membros</h1>
-            <p class="text-sm text-gray-500 mt-1">{{ $totalMembers }} membro(s) — {{ $totalActive }} ativo(s)</p>
+            <h1 class="text-2xl font-bold text-text-primary font-heading">Membros</h1>
+            <p class="text-sm text-text-secondary mt-1">{{ $totalMembers }} membro(s) — {{ $totalActive }} ativo(s)</p>
         </div>
         @can("member.create")
             <x-button wire:click="create">+ Novo Membro</x-button>
@@ -180,10 +180,10 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
     <x-card :padding="false">
         <div class="p-4 flex flex-wrap items-center gap-3">
             <div class="relative flex-1 min-w-[200px]">
-                <input wire:model.live.debounce="search" type="text" placeholder="Buscar por nome..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <x-text-input wire:model.live.debounce="search" type="text" placeholder="Buscar por nome..." class="w-full pl-10" />
+                <x-icon name="search" size="5" class="absolute left-3 top-2.5 text-text-muted" />
             </div>
-            <select wire:model.live="filterStatus" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <select wire:model.live="filterStatus" class="px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-surface text-text-primary">
                 <option value="">Todas situações</option>
                 <option value="Ativo">Ativo</option>
                 <option value="Congregado">Congregado</option>
@@ -191,7 +191,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                 <option value="Afastado">Afastado</option>
                 <option value="Transferido">Transferido</option>
             </select>
-            <select wire:model.live="filterRole" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <select wire:model.live="filterRole" class="px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-surface text-text-primary">
                 <option value="">Todas funções</option>
                 @foreach($roles as $role)
                     <option value="{{ $role }}">{{ $role }}</option>
@@ -203,10 +203,10 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
 
     @if($showForm)
         <x-card>
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">{{ $editId ? "Editar Membro" : "Novo Membro" }}</h2>
+            <h2 class="text-lg font-semibold text-text-primary font-heading mb-4">{{ $editId ? "Editar Membro" : "Novo Membro" }}</h2>
             <form wire:submit="save" class="space-y-6">
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Dados Pessoais</h3>
+                    <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3">Dados Pessoais</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <x-input-label value="Nome *" />
@@ -219,7 +219,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                         </div>
                         <div>
                             <x-input-label value="Gênero" />
-                            <select wire:model="gender" class="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm">
+                            <select wire:model="gender" class="w-full border-input focus:border-primary focus:ring-primary rounded-md shadow-sm bg-surface text-text-primary">
                                 <option value="">Selecione</option>
                                 <option value="Masculino">Masculino</option>
                                 <option value="Feminino">Feminino</option>
@@ -228,7 +228,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                         </div>
                         <div>
                             <x-input-label value="Estado Civil" />
-                            <select wire:model="marital_status" class="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm">
+                            <select wire:model="marital_status" class="w-full border-input focus:border-primary focus:ring-primary rounded-md shadow-sm bg-surface text-text-primary">
                                 <option value="">Selecione</option>
                                 <option value="Solteiro(a)">Solteiro(a)</option>
                                 <option value="Casado(a)">Casado(a)</option>
@@ -241,7 +241,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                 </div>
 
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Contato</h3>
+                    <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3">Contato</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <x-input-label value="Telefone" />
@@ -259,7 +259,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                 </div>
 
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Informações da Igreja</h3>
+                    <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3">Informações da Igreja</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <x-input-label value="Função/Cargo" />
@@ -267,7 +267,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                         </div>
                         <div>
                             <x-input-label value="Situação" />
-                            <select wire:model="status" class="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm">
+                            <select wire:model="status" class="w-full border-input focus:border-primary focus:ring-primary rounded-md shadow-sm bg-surface text-text-primary">
                                 <option value="Ativo">Ativo</option>
                                 <option value="Congregado">Congregado</option>
                                 <option value="Visitante">Visitante</option>
@@ -287,7 +287,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                 </div>
 
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Observações</h3>
+                    <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3">Observações</h3>
                     <x-textarea wire:model="notes" rows="3" class="w-full" />
                 </div>
 
@@ -306,9 +306,9 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                     <div class="flex flex-col h-full">
                         <div class="flex items-start justify-between mb-2">
                             <div class="min-w-0 flex-1">
-                                <h3 class="font-semibold text-gray-900 truncate">{{ $member->name }}</h3>
+                                <h3 class="font-semibold text-text-primary truncate">{{ $member->name }}</h3>
                                 @if($member->role_function)
-                                    <p class="text-sm text-gray-500 truncate">{{ $member->role_function }}</p>
+                                    <p class="text-sm text-text-secondary truncate">{{ $member->role_function }}</p>
                                 @endif
                             </div>
                             <x-status :active="$member->active" class="ml-2 shrink-0" />
@@ -326,18 +326,27 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                                 <x-badge variant="indigo">{{ $member->birth_date->format("d/m/Y") }}</x-badge>
                             @endif
                         </div>
-                        <div class="space-y-1 text-sm text-gray-600 flex-1">
+                        <div class="space-y-1 text-sm text-text-secondary flex-1">
                             @if($member->phone)
-                                <p class="truncate">📞 {{ $member->phone }}</p>
+                                <p class="truncate flex items-center gap-1.5">
+                                    <x-icon name="phone" size="4" class="shrink-0" />
+                                    {{ $member->phone }}
+                                </p>
                             @endif
                             @if($member->whatsapp)
-                                <p class="truncate">💬 {{ $member->whatsapp }}</p>
+                                <p class="truncate flex items-center gap-1.5">
+                                    <x-icon name="chat" size="4" class="shrink-0" />
+                                    {{ $member->whatsapp }}
+                                </p>
                             @endif
                             @if($member->email)
-                                <p class="truncate">✉️ {{ $member->email }}</p>
+                                <p class="truncate flex items-center gap-1.5">
+                                    <x-icon name="mail" size="4" class="shrink-0" />
+                                    {{ $member->email }}
+                                </p>
                             @endif
                         </div>
-                        <div class="flex gap-2 mt-4 pt-3 border-t border-gray-100">
+                        <div class="flex gap-2 mt-4 pt-3 border-t border-border">
                             @can("member.edit")
                                 <x-button size="sm" variant="secondary" wire:click="edit({{ $member->id }})">Editar</x-button>
                             @endcan

@@ -48,7 +48,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
     public function save()
     {
         $this->validate([
-            "category_id" => "required|exists:categories,id",
+            "category_id" => "required|exists:financial_categories,id",
             "date" => "required|date",
             "amount" => "required|string",
             "payment_method" => "required|string",
@@ -113,7 +113,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
 
 <div class="space-y-6">
     <div class="flex items-center justify-between flex-wrap gap-3">
-        <h1 class="text-2xl font-bold text-gray-800">Saídas</h1>
+        <h1 class="text-2xl font-bold text-text-primary">Saídas</h1>
         @can("expense.create")
             <x-button wire:click="create">+ Nova Saída</x-button>
         @endcan
@@ -121,36 +121,36 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
 
     <x-card :padding="false">
         <div class="p-4 flex flex-wrap items-center gap-3">
-            <select wire:model.live="filterMonth" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <select wire:model.live="filterMonth" class="px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-primary">
                 @for($m = 1; $m <= 12; $m++)
                     <option value="{{ $m }}">{{ \Carbon\Carbon::create()->month($m)->locale("pt_BR")->translatedFormat("F") }}</option>
                 @endfor
             </select>
-            <select wire:model.live="filterYear" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <select wire:model.live="filterYear" class="px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-primary">
                 @for($y = now()->year - 5; $y <= now()->year; $y++)
                     <option value="{{ $y }}">{{ $y }}</option>
                 @endfor
             </select>
-            <select wire:model.live="filterCategoryId" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <select wire:model.live="filterCategoryId" class="px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-primary">
                 <option value="">Todas categorias</option>
                 @foreach($categories as $c)
                     <option value="{{ $c->id }}">{{ $c->name }}</option>
                 @endforeach
             </select>
-            <div class="ml-auto text-sm text-gray-500">
-                Total: <span class="font-semibold text-red-600">R$ {{ number_format($total, 2, ",", ".") }}</span>
+            <div class="ml-auto text-sm text-text-secondary">
+                Total: <span class="font-semibold text-danger">R$ {{ number_format($total, 2, ",", ".") }}</span>
             </div>
         </div>
     </x-card>
 
     @if($showForm)
         <x-card>
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">{{ $editId ? "Editar Saída" : "Nova Saída" }}</h2>
+            <h2 class="text-lg font-semibold text-text-primary mb-4">{{ $editId ? "Editar Saída" : "Nova Saída" }}</h2>
             <form wire:submit="save" class="space-y-4 max-w-lg">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <x-input-label value="Categoria *" />
-                        <select wire:model="category_id" class="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm">
+                        <select wire:model="category_id" class="w-full border-input focus:border-primary focus:ring-primary rounded-md shadow-sm">
                             <option value="">Selecione</option>
                             @foreach($categories as $c)
                                 <option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -170,7 +170,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                     </div>
                     <div>
                         <x-input-label value="Forma de Pagamento" />
-                        <select wire:model="payment_method" class="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm">
+                        <select wire:model="payment_method" class="w-full border-input focus:border-primary focus:ring-primary rounded-md shadow-sm">
                             <option>Dinheiro</option>
                             <option>PIX</option>
                             <option>Cartão</option>
@@ -198,19 +198,19 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
                     <div class="flex flex-col h-full">
                         <div class="flex items-start justify-between mb-2">
                             <div>
-                                <p class="font-semibold text-gray-900">{{ $exp->description ?? $exp->category?->name }}</p>
-                                <p class="text-sm text-gray-500">{{ $exp->category?->name }}</p>
+                                <p class="font-semibold text-text-primary">{{ $exp->description ?? $exp->category?->name }}</p>
+                                <p class="text-sm text-text-secondary">{{ $exp->category?->name }}</p>
                             </div>
-                            <span class="text-lg font-bold text-red-600 shrink-0">R$ {{ number_format($exp->amount, 2, ",", ".") }}</span>
+                            <span class="text-lg font-bold text-danger shrink-0">R$ {{ number_format($exp->amount, 2, ",", ".") }}</span>
                         </div>
-                        <div class="space-y-1 text-sm text-gray-500 flex-1">
+                        <div class="space-y-1 text-sm text-text-secondary flex-1">
                             <p>📅 {{ $exp->date->format("d/m/Y") }}</p>
                             <p>💳 {{ $exp->payment_method }}</p>
                             @if($exp->description)
-                                <p class="text-gray-400 italic">{{ \Illuminate\Support\Str::limit($exp->description, 60) }}</p>
+                                <p class="text-text-muted italic">{{ \Illuminate\Support\Str::limit($exp->description, 60) }}</p>
                             @endif
                         </div>
-                        <div class="flex gap-2 mt-4 pt-3 border-t border-gray-100">
+                        <div class="flex gap-2 mt-4 pt-3 border-t border-border">
                             @can("expense.edit")
                                 <x-button size="sm" variant="secondary" wire:click="edit({{ $exp->id }})">Editar</x-button>
                             @endcan
@@ -224,7 +224,7 @@ new #[\Livewire\Attributes\Layout("layouts.app")] class extends Component {
         </div>
     @else
         <x-card>
-            <p class="text-center text-gray-500 py-8">Nenhuma saída no período.</p>
+            <p class="text-center text-text-secondary py-8">Nenhuma saída no período.</p>
         </x-card>
     @endif
 
